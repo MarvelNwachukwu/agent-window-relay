@@ -23,7 +23,11 @@ The toolbar badge shows **on** while connected to the relay.
 
 ### omp version
 
-Use omp **18.12.1 or newer** (`omp update`). Older versions don't open a tab of their own: an open without `app.target` takes over the tab you're looking at, and no extension can prevent that.
+Use omp **18.12.1 or newer**. Older versions don't open a tab of their own: an open without `app.target` takes over the tab you're looking at, and no extension can prevent that.
+
+After updating, restart every running omp session: a session started before the update keeps running the old code, even though `omp --version` already reports the new one. If you launch omp through a wrapper or another tool, also check the update reached the copy it runs. `omp update` can install a separate binary instead of upgrading the one a wrapper finds (for a Bun install, `bun install -g @oh-my-pi/pi-coding-agent@latest` upgrades it in place).
+
+Tested with omp 18.12.6 and Chrome 156 on macOS: four agents in parallel, each in its own tab in the agent window, without touching the user's window or focus.
 
 ### Notices from omp
 
@@ -47,6 +51,7 @@ Click the toolbar icon:
 - ask before sending, buying or deleting
 - hand logins and 2FA back to you
 - never bring a tab to the front
+- keep parallel agents on separate tabs, and back off when a site rate-limits
 
 Install it by linking it into a skills folder your agent reads. omp reads `~/.agents/skills`, and Claude Code reads `~/.claude/skills`:
 
