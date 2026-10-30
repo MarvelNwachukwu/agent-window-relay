@@ -39,6 +39,21 @@ Click the toolbar icon:
 | Token | empty | Must match `omp browser-relay --token` |
 | Open omp's tabs in | A window of their own | Or "The window you're using" |
 
+## Agent skill
+
+[`skills/agent-window-relay`](skills/agent-window-relay/SKILL.md) teaches the agent how to use your Chrome through this extension:
+- open its own tabs in the agent window
+- borrow your tabs only when you point at one
+- ask before sending, buying or deleting
+- hand logins and 2FA back to you
+- never bring a tab to the front
+
+Install it by linking it into a skills folder your agent reads. omp reads `~/.agents/skills`, and Claude Code reads `~/.claude/skills`:
+
+```sh
+ln -s "$PWD/skills/agent-window-relay" ~/.agents/skills/agent-window-relay
+```
+
 ## Security
 
 Anything that can reach the relay port can drive your logged-in browser. The relay only listens on loopback; set a token (`omp browser-relay --token <secret>`, mirrored in the settings) if you don't trust other local processes.
