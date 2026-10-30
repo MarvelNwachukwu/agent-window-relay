@@ -1,0 +1,22 @@
+{
+	"manifest_version": 3,
+	"name": "Agent Window Relay",
+	"version": "1.0.0",
+	"description": "Lets the omp coding agent drive Chrome from a window of its own, without taking over the window you're working in.",
+	"author": "Marvel Nwachukwu",
+	"homepage_url": "https://github.com/MarvelNwachukwu/agent-window-relay",
+	"permissions": [
+		"debugger",
+		"tabs",
+		"tabGroups",
+		"storage",
+		"alarms"
+	],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"options_page": "options.html",
+	"action": {
+		"default_title": "Agent Window Relay (click for settings)"
+	}
+}
