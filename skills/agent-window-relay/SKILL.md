@@ -43,6 +43,13 @@ const tab = await browser.open({ name: "gmail", app: { relay: true, target: "mai
 - A borrowed tab sits in the user's window. Read it; don't navigate it away, and don't type into it unless asked.
 - `tab.close()` releases a borrowed tab without closing it.
 
+## Several agents at once
+
+Subagents can share one eval kernel, so a bare `tab` variable set by one agent gets overwritten by another, and clicks or `close()` land on the wrong tab.
+- Give every agent its own browser name, and fetch the handle in each cell: `const accordTab = browser.tab("jiji-accord");`. Never a bare `tab` or `page` global.
+- Keep each agent's state under its own key (`globalThis.jijiAccord`). Before extracting, check `(await accordTab.url())` is still the agent's page.
+- On old omp (below 18.12.1), the coordinator opens the tabs instead: send `Target.createTarget { url }` over the relay websocket (`ws://127.0.0.1:9224/cdp`), and the extension puts each tab in the agent window. Hand each agent its tab by a unique URL substring as `app.target`. Relay `PAGE…` ids don't resolve as `app.target` on those versions.
+
 ## Acting as the user
 
 - Consent to look is not consent to send, post, buy, pay, delete, accept, or change settings. Confirm with the user first, naming the exact action.
