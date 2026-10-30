@@ -32,6 +32,8 @@ Open one name per independent task, and reuse it: re-opening the same name keeps
 
 Several agents paging the same site at once can trip its rate limit: the tab lands on `chrome-error://chromewebdata/` (often an HTTP 429). Check the URL after every navigation; on an error page, wait 5–30 s and retry, and space page loads a few seconds apart.
 
+Each call into the page must answer within the relay's 20 s limit, or it fails with `extension rpc 'send' timed out after 20000ms`. Keep `evaluate` calls short. For a long job (many `fetch`es, slow scrolling), start it in the page without awaiting it, store the result on `window`, and poll for it with short calls.
+
 ## Borrow one of the user's tabs (only when asked)
 
 Only when the user points at a page they already have open ("check my Gmail tab"):
