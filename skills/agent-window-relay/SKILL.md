@@ -14,7 +14,7 @@ What the extension guarantees:
 
 ## Before the first open
 
-1. Run `omp --version`. Below **18.12.1**, an open without `app.target` takes over the tab the user is looking at. On those versions, only borrow a tab the user explicitly names, and tell them to run `omp update`.
+1. Check omp is **18.12.1 or newer**. Below that, an open without `app.target` takes over the tab the user is looking at. On those versions, only borrow a tab the user explicitly names, and tell them to update. `omp --version` reports the *installed* omp, but a session started before an update keeps running the old code. If this session may predate the update, do the browser work from a fresh `omp -p` process instead.
 2. If the workspace has its own browser tooling, that stays the default. Use the relay when the user asks for their own Chrome or a logged-in session.
 3. Public or static pages don't need a browser: use `read`.
 
@@ -23,12 +23,14 @@ What the extension guarantees:
 ```js
 const tab = await browser.open({ name: "work", url: "https://example.com", app: { relay: true } });
 const view = await tab.observe({ compact: true });
-display({ url: await tab.url(), title: await tab.title(), elements: view.elements });
+console.log(JSON.stringify({ url: await tab.url(), title: await tab.title(), elements: view.elements }));
 // Done: closes the agent tab; the agent window stays open for next time.
 await tab.close();
 ```
 
-Open one name per independent task, and reuse it: re-opening the same name keeps its tab. Close tabs when finished. Never leave a pile of agent tabs in the agent window.
+Open one name per independent task, and reuse it: re-opening the same name keeps its tab. Close tabs when finished. Never leave a pile of agent tabs in the agent window. Tabs the agent opened also close when its omp session ends.
+
+Several agents paging the same site at once can trip its rate limit: the tab lands on `chrome-error://chromewebdata/` (often an HTTP 429). Check the URL after every navigation; on an error page, wait 5–30 s and retry, and space page loads a few seconds apart.
 
 ## Borrow one of the user's tabs (only when asked)
 
